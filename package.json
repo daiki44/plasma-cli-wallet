@@ -7,9 +7,9 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@cryptoeconomicslab/eth-plasma-light-client": "0.0.40",
+    "@cryptoeconomicslab/eth-plasma-light-client": "^0.3.4",
     "@cryptoeconomicslab/level-kvs": "0.0.6",
-    "@cryptoeconomicslab/primitives": "0.0.40",
+    "@cryptoeconomicslab/primitives": "^0.3.4",
     "ethers": "^4.0.46"
   }
 }

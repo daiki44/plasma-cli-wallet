@@ -12,17 +12,22 @@ const DEPOSIT_CONTRACT_ADDRESS = config.payoutContracts.DepositContract;
 
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
 });
+
+async function deposit(client, amount) {
+  console.log("deposit:", amount);
+  await client.deposit(amount, DEPOSIT_CONTRACT_ADDRESS);
+}
 
 async function getBalance(client) {
   const balance = await client.getBalance();
   console.log(`${client.address}:`, balance);
 }
 
-async function deposit(client, amount) {
-  console.log("deposit:", amount);
-  await client.deposit(amount, DEPOSIT_CONTRACT_ADDRESS);
+async function getL1Balance(client) {
+  const balance = await client.wallet.getL1Balance();
+  console.log(`${client.address}:`, balance.value.raw, balance.symbol);
 }
 
 async function transfer(client, amount, to) {
@@ -58,14 +63,14 @@ async function startLightClient() {
     wallet,
     kvs,
     config,
-    aggregatorEndpoint: "http://127.0.0.1:3000"
+    aggregatorEndpoint: "http://127.0.0.1:3000",
   });
   await lightClient.start();
   return lightClient;
 }
 
 function cuiWalletReadLine(client) {
-  rl.question(">> ", async input => {
+  rl.question(">> ", async (input) => {
     const args = input.split(/\s+/);
     const command = args.shift();
     switch (command) {
@@ -80,31 +85,35 @@ Commands:
   finalizeexit [index]: withdraw token from exit list
   quit: quit this process
           `);
-        cuiWalletReadLine();
+        cuiWalletReadLine(client);
         break;
       case "getbalance":
         await getBalance(client);
-        cuiWalletReadLine();
+        cuiWalletReadLine(client);
+        break;
+      case "getl1balance":
+        await getL1Balance(client);
+        cuiWalletReadLine(client);
         break;
       case "deposit":
         await deposit(client, args[0]);
-        cuiWalletReadLine();
+        cuiWalletReadLine(client);
         break;
       case "transfer":
         await transfer(client, args[0], args[1]);
-        cuiWalletReadLine();
+        cuiWalletReadLine(client);
         break;
       case "showexitlist":
         await showExitList(client);
-        cuiWalletReadLine();
+        cuiWalletReadLine(client);
         break;
       case "exit":
         await exit(client, args[0]);
-        cuiWalletReadLine();
+        cuiWalletReadLine(client);
         break;
       case "finalizeexit":
         await finalizeExit(client, args[0]);
-        cuiWalletReadLine();
+        cuiWalletReadLine(client);
         break;
       case "quit":
         console.log("Bye.");
@@ -112,7 +121,7 @@ Commands:
         process.exit();
       default:
         console.log(`${command} is not found`);
-        cuiWalletReadLine();
+        cuiWalletReadLine(client);
     }
   });
 }
