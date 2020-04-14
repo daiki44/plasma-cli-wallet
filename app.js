@@ -38,10 +38,10 @@ async function transfer(client, amount, to) {
 async function exit(client, amount) {
   console.log("exit:", DEPOSIT_CONTRACT_ADDRESS, amount);
   await client.exit(amount, DEPOSIT_CONTRACT_ADDRESS);
-  await showExitList(client);
+  await getExitList(client);
 }
 
-async function showExitList(client) {
+async function getExitList(client) {
   const exitList = await client.getExitList();
   console.log("exit list:", exitList);
 }
@@ -81,7 +81,7 @@ Commands:
   deposit [amount]: deposit token to plasma
   transfer [amount] [to]: transfer token
   exit [amount]: submit exit claim
-  showexitlist: show your exit list
+  getexitlist: show your exit list
   finalizeexit [index]: withdraw token from exit list
   quit: quit this process
           `);
@@ -103,8 +103,8 @@ Commands:
         await transfer(client, args[0], args[1]);
         cuiWalletReadLine(client);
         break;
-      case "showexitlist":
-        await showExitList(client);
+      case "getexitlist":
+        await getExitList(client);
         cuiWalletReadLine(client);
         break;
       case "exit":
