@@ -1,6 +1,6 @@
-# Plasma CUI Wallet
+# Plasma CLI Wallet
 
-This is the Plasma CUI Wallet using [wakkanay](https://github.com/cryptoeconomicslab/wakkanay).
+This is the Plasma CLI Wallet using [wakkanay](https://github.com/cryptoeconomicslab/wakkanay).
 
 ## Development
 
